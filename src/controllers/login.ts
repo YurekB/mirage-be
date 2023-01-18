@@ -21,20 +21,20 @@ const loginController = async (
       password: req.body?.password,
     };
 
-    console.log("GOTHERE");
+    console.log("GOT HERE");
 
-    // let existingPerson: object = await Users.findOne({
-    //   where: {
-    //     email: { [Op.eq]: data?.email },
-    //   },
-    // }).catch((err: any) => console.log("err", err));
+    let existingPerson: object = await Users.findOne({
+      where: {
+        email: { [Op.eq]: data?.email },
+      },
+    }).catch((err: any) => console.log("err", err));
 
-    // console.log(existingPerson, "EXISTING PERSON");
+    console.log(existingPerson, "EXISTING PERSON");
 
-    // let newLead = await Users.create(data).catch((err: any) =>
-    //   accessLogStream(err)
-    // );
-    // userId = (newLead as any)?.id;
+    let newLead = await Users.create(data).catch((err: any) =>
+      accessLogStream(err)
+    );
+    userId = (newLead as any)?.id;
 
     res.send({ success: true, userId: 100, msg: "Successfull" });
   } catch (err) {

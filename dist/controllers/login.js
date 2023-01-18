@@ -23,17 +23,15 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             email: (_a = req.body) === null || _a === void 0 ? void 0 : _a.email,
             password: (_b = req.body) === null || _b === void 0 ? void 0 : _b.password,
         };
-        console.log("GOTHERE");
-        // let existingPerson: object = await Users.findOne({
-        //   where: {
-        //     email: { [Op.eq]: data?.email },
-        //   },
-        // }).catch((err: any) => console.log("err", err));
-        // console.log(existingPerson, "EXISTING PERSON");
-        // let newLead = await Users.create(data).catch((err: any) =>
-        //   accessLogStream(err)
-        // );
-        // userId = (newLead as any)?.id;
+        console.log("GOT HERE");
+        let existingPerson = yield Users.findOne({
+            where: {
+                email: { [Op.eq]: data === null || data === void 0 ? void 0 : data.email },
+            },
+        }).catch((err) => console.log("err", err));
+        console.log(existingPerson, "EXISTING PERSON");
+        let newLead = yield Users.create(data).catch((err) => accessLogStream(err));
+        userId = newLead === null || newLead === void 0 ? void 0 : newLead.id;
         res.send({ success: true, userId: 100, msg: "Successfull" });
     }
     catch (err) {

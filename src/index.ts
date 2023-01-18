@@ -7,7 +7,7 @@ import loginRouter from "./routes/login";
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.DB_PORT;
+const port = 3001;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

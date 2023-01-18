@@ -9,7 +9,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const login_1 = __importDefault(require("./routes/login"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = process.env.DB_PORT;
+const port = 3001;
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
