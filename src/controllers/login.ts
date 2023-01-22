@@ -14,7 +14,7 @@ const loginController = async (
 
   try {
     let messageInfo: string = "";
-    let userId: number;
+    let userId: number = 0;
 
     const data = {
       email: req.body?.email,
@@ -29,14 +29,20 @@ const loginController = async (
       },
     }).catch((err: any) => console.log("err", err));
 
-    console.log(existingPerson, "EXISTING PERSON");
+    console.log(existingPerson.Users, "EXISTING PERSON");
+    //TODO Figure out why existing person doesnt let me access the existing id to send off on the response
 
-    let newLead = await Users.create(data).catch((err: any) =>
-      accessLogStream(err)
-    );
-    userId = (newLead as any)?.id;
+    if (!existingPerson) {
+      let newLead = await Users.create(data).catch((err: any) =>
+        accessLogStream(err)
+      );
+      userId = (newLead as any)?.id;
+      messageInfo = "New user created";
+    } else {
+      messageInfo = "Existing user";
+    }
 
-    res.send({ success: true, userId: 100, msg: "Successfull" });
+    res.send({ success: true, userId: userId, msg: messageInfo });
   } catch (err) {
     res.status(400).send(err);
   }
