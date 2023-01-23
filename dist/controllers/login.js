@@ -18,7 +18,7 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     console.log(req.body, "GOT REQ BODY");
     try {
         let messageInfo = "";
-        let userId;
+        let userId = 0;
         const data = {
             email: (_a = req.body) === null || _a === void 0 ? void 0 : _a.email,
             password: (_b = req.body) === null || _b === void 0 ? void 0 : _b.password,
@@ -29,10 +29,17 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
                 email: { [Op.eq]: data === null || data === void 0 ? void 0 : data.email },
             },
         }).catch((err) => console.log("err", err));
-        console.log(existingPerson, "EXISTING PERSON");
-        let newLead = yield Users.create(data).catch((err) => accessLogStream(err));
-        userId = newLead === null || newLead === void 0 ? void 0 : newLead.id;
-        res.send({ success: true, userId: 100, msg: "Successfull" });
+        // console.log(existingPerson.Users, "EXISTING PERSON");
+        //TODO Figure out why existing person doesnt let me access the existing id to send off on the response
+        if (!existingPerson) {
+            let newLead = yield Users.create(data).catch((err) => accessLogStream(err));
+            userId = newLead === null || newLead === void 0 ? void 0 : newLead.id;
+            messageInfo = "New user created";
+        }
+        else {
+            messageInfo = "Existing user";
+        }
+        res.send({ success: true, userId: userId, msg: messageInfo });
     }
     catch (err) {
         res.status(400).send(err);

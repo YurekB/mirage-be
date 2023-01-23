@@ -23,14 +23,11 @@ const loginController = async (
 
     console.log("GOT HERE");
 
-    let existingPerson: object = await Users.findOne({
+    let existingPerson = await Users.findOne({
       where: {
         email: { [Op.eq]: data?.email },
       },
     }).catch((err: any) => console.log("err", err));
-
-    console.log(existingPerson.Users, "EXISTING PERSON");
-    //TODO Figure out why existing person doesnt let me access the existing id to send off on the response
 
     if (!existingPerson) {
       let newLead = await Users.create(data).catch((err: any) =>
@@ -39,7 +36,13 @@ const loginController = async (
       userId = (newLead as any)?.id;
       messageInfo = "New user created";
     } else {
-      messageInfo = "Existing user";
+      if (data.password !== existingPerson.password) {
+        messageInfo = "Wrong password";
+        throw new Error("Incorrect password");
+      } else {
+        messageInfo = "Existing user, logged in";
+        userId = existingPerson.id;
+      }
     }
 
     res.send({ success: true, userId: userId, msg: messageInfo });
